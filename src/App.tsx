@@ -1,10 +1,16 @@
+import { Container } from "./components/Container";
+import { Header } from "./components/Header";
+import { PageWrapper } from "./components/PageWrapper";
+import PuppiesList from "./components/PuppiesList";
+
 function App() {
   return (
-    <>
-      <div>
-        <h1 className="text-3xl font-bold underline">Hello World</h1>
-      </div>
-    </>
+    <PageWrapper>
+      <Container>
+        <Header />
+        <PuppiesList />
+      </Container>
+    </PageWrapper>
   );
 }
 

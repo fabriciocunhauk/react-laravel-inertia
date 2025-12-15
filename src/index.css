@@ -1,36 +1,9 @@
 @import "tailwindcss";
 
-/* * 1. CONFIGURATION: Use @theme for all custom design tokens.
- * This replaces the "theme" object in the old tailwind.config.js.
- * We are defining custom colors here for exact matches.
- */
 @theme {
-  /* Define custom colors used for links and button borders */
-  --color-link: #646cff; /* Used for default link color and button hover border */
-  --color-link-hover: #535bf2; /* Used for link hover color (Dark Mode) */
-  --color-link-light-hover: #747bff; /* Used for link hover color (Light Mode) */
-
-  /* Define the main background/foreground colors used in :root (body) */
-  --color-dark-bg: #242424;
-  --color-dark-text: rgba(255, 255, 255, 0.87);
-  --color-light-bg: #ffffff;
-  --color-light-text: #213547;
-
-  /* Define button background colors */
-  --color-btn-dark: #1a1a1a;
-  --color-btn-light: #f9f9f9;
 }
 
-/* * 2. BASE STYLES / OVERRIDES: Apply classes to core elements using @apply.
- * This overrides Tailwind's base layer styles.
- */
-
 :root {
-  /* * Apply global properties.
-   * Note: The utility classes for background/color will be applied directly to <body> 
-   * for better theme management, but we keep the generic CSS properties here 
-   * for things not directly mapped to a utility (or those already handled by preflight).
-   */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -39,62 +12,4 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  /* Structural and Default Dark Mode Theme classes */
-  @apply m-0 flex place-items-center min-w-[320px] min-h-screen 
-        bg-dark-bg text-dark-text font-sans leading-normal font-normal;
-}
-
-h1 {
-  /* Using arbitrary values for exact match of font-size and line-height */
-  @apply text-[3.2em] leading-[1.1];
-}
-
-a {
-  /* Default Link Styles */
-  @apply font-medium text-link no-underline;
-}
-
-a:hover {
-  /* Dark Mode Link Hover (uses the custom color defined in @theme) */
-  @apply text-link-hover;
-}
-
-/* * 3. COMPONENT STYLES: Define custom classes for repeated elements like buttons.
- */
-.btn {
-  /* Base Button Styles */
-  @apply rounded-lg border border-transparent px-3 py-1.5 text-base font-medium font-inherit 
-        bg-btn-dark cursor-pointer transition-colors duration-200;
-}
-
-.btn:hover {
-  /* Button Hover Border */
-  @apply border-link; /* Using the same color as the link default for consistency */
-}
-
-.btn:focus,
-.btn:focus-visible {
-  /* Using ring utilities for focus indication */
-  @apply outline-none ring-4 ring-offset-2 ring-link/50;
-}
-
-/* * 4. MEDIA QUERIES: Translate the light mode preference.
- * We use the standard CSS media query and @apply utilities inside it.
- */
-@media (prefers-color-scheme: light) {
-  /* Override the body's dark mode defaults with light mode defaults */
-  body {
-    @apply bg-light-bg text-light-text;
-  }
-
-  a:hover {
-    @apply text-link-light-hover;
-  }
-
-  .btn {
-    @apply bg-btn-light;
-  }
 }
