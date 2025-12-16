@@ -1,29 +1,16 @@
 import { useEffect, useState } from "react";
+import { fetchPuppies } from "../api/FetchPuppies";
 
 function PuppiesList() {
   const [PuppiesList, setPuppiesList] = useState([]);
 
   useEffect(() => {
-    try {
-      const fetchPuppies = async () => {
-        const response = await fetch(
-          "https://api.thedogapi.com/v1/breeds?limit=20",
-          {
-            headers: {
-              "x-api-key": `${import.meta.env.VITE_API_KEY}`,
-            },
-            method: "GET",
-          },
-        );
-        const data = await response.json();
-
-        setPuppiesList(data);
-      };
-
-      fetchPuppies();
-    } catch (error) {
-      console.error(error);
+    async function getPuppies() {
+      const puppies = await fetchPuppies();
+      setPuppiesList(puppies);
     }
+
+    getPuppies();
   }, []);
 
   return (
@@ -33,7 +20,7 @@ function PuppiesList() {
           <li className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5">
             <img
               className="aspect-square object-cover"
-              alt="Frisket"
+              alt={puppy.name}
               src={puppy.image.url}
             />
             <div className="gap flex items-center justify-between p-4 text-sm">
