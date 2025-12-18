@@ -1,21 +1,17 @@
-import { useEffect, useState } from "react";
-import { fetchPuppies } from "../api/FetchPuppies";
 import LikeButton from "./LikeButton";
 
-function PuppiesList() {
-  const [puppiesList, setPuppiesList] = useState([]);
+type PuppiesListProps = {
+  puppiesList: {
+    id: number;
+    name: string;
+    bred_for: string;
+    image: { url: string };
+  }[];
+  isLiked: number[];
+  setIsLiked: React.Dispatch<React.SetStateAction<number[]>>;
+};
 
-  useEffect(() => {
-    async function getPuppies() {
-      const puppies = await fetchPuppies();
-      setPuppiesList(puppies);
-    }
-
-    getPuppies();
-  }, []);
-
-  console.log(puppiesList);
-
+function PuppiesList({ puppiesList, isLiked, setIsLiked }: PuppiesListProps) {
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {puppiesList.map(
@@ -25,7 +21,12 @@ function PuppiesList() {
           bred_for: string;
           image: { url: string };
         }) => (
-          <PuppyCard key={puppy.id} puppy={puppy} />
+          <PuppyCard
+            key={puppy.id}
+            puppy={puppy}
+            isLiked={isLiked}
+            setIsLiked={setIsLiked}
+          />
         ),
       )}
     </ul>
@@ -36,8 +37,12 @@ export default PuppiesList;
 
 function PuppyCard({
   puppy,
+  isLiked,
+  setIsLiked,
 }: {
   puppy: { id: number; name: string; bred_for: string; image: { url: string } };
+  isLiked: number[];
+  setIsLiked: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
   return (
     <li className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5">
@@ -52,7 +57,11 @@ function PuppyCard({
           <span className="text-slate-300">·</span>
           <p className="text-slate-500">{puppy.bred_for}</p>
         </div>
-        <LikeButton />
+        <LikeButton
+          puppyId={puppy.id}
+          isLiked={isLiked}
+          setIsLiked={setIsLiked}
+        />
       </div>
     </li>
   );

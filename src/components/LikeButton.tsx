@@ -1,28 +1,42 @@
 import { Heart } from "lucide-react";
 import { useState } from "react";
 
-function LikeButton() {
-  const [isLiked, setIsLiked] = useState(false);
+type LikeButtonProps = {
+  puppyId: number;
+  isLiked: number[];
+  setIsLiked: React.Dispatch<React.SetStateAction<number[]>>;
+};
+
+function LikeButton({ puppyId, isLiked, setIsLiked }: LikeButtonProps) {
   const [count, setCount] = useState(0);
+  const currentlyLiked = isLiked.includes(puppyId);
 
   const handleClick = () => {
-    setIsLiked(!isLiked);
-
-    if (isLiked) return;
-
-    setCount(count + 1);
+    if (currentlyLiked) {
+      // 2. Remove ID from array (Unlike)
+      setIsLiked(isLiked.filter((id) => id !== puppyId));
+      setCount((prev) => prev - 1);
+    } else {
+      // 3. Add ID to array using spread (Like)
+      // This creates a NEW array reference so React triggers a re-render
+      setIsLiked([...isLiked, puppyId]);
+      setCount((prev) => prev + 1);
+    }
   };
 
   return (
-    <button className="flex items-center gap-1" onClick={handleClick}>
+    <button className="group flex items-center gap-1" onClick={handleClick}>
       <Heart
         className={
-          isLiked
-            ? "fill-pink-500 stroke-none"
-            : "stroke-slate-200 group-hover:stroke-slate-300"
+          currentlyLiked
+            ? "fill-pink-500 stroke-pink-500"
+            : "stroke-slate-400 group-hover:stroke-slate-600"
         }
+        size={20}
       />
-      <span>{count}</span>
+      <span className={currentlyLiked ? "text-pink-600" : "text-slate-600"}>
+        {count}
+      </span>
     </button>
   );
 }
