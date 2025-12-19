@@ -1,13 +1,10 @@
 import { Heart, X } from "lucide-react";
 import { useLiked } from "../hooks/useLiked";
+import type { PuppiesListTypes } from "../types/puppyTypes";
 
 type ShortlistProps = {
   puppyIds: number[];
-  puppiesList: {
-    id: number;
-    name: string;
-    image: { url: string };
-  }[];
+  puppiesList: PuppiesListTypes[];
 };
 
 export function Shortlist({ puppyIds, puppiesList }: ShortlistProps) {

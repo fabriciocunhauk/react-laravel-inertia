@@ -1,7 +1,30 @@
-export function NewPuppyForm() {
+import type { Dispatch, SetStateAction } from "react";
+import type { PuppiesListTypes } from "../types/puppyTypes";
+
+export function NewPuppyForm({
+  puppiesList,
+  setPuppiesList,
+}: {
+  puppiesList: PuppiesListTypes[];
+  setPuppiesList: Dispatch<SetStateAction<PuppiesListTypes[]>>;
+}) {
+  const addNewPuppy = (formData: FormData) => {
+    const newPuppy: PuppiesListTypes = {
+      id: puppiesList.length + 1,
+      name: formData.get("name") as string,
+      bred_for: formData.get("bred_for") as string,
+      image: { url: "https://cdn2.thedogapi.com/images/BJa4kxc4X.jpg" },
+    };
+
+    setPuppiesList([...puppiesList, newPuppy]);
+  };
+
   return (
     <div className="mt-12 flex items-center justify-between bg-white p-8 shadow ring ring-black/5">
-      <form className="mt-4 flex w-full flex-col items-start gap-4">
+      <form
+        action={(formData) => addNewPuppy(formData)}
+        className="mt-4 flex w-full flex-col items-start gap-4"
+      >
         <div className="grid w-full gap-6 md:grid-cols-3">
           <fieldset className="flex w-full flex-col gap-1">
             <label htmlFor="name">Name</label>
@@ -13,24 +36,24 @@ export function NewPuppyForm() {
             />
           </fieldset>
           <fieldset className="flex w-full flex-col gap-1">
-            <label htmlFor="trait">Personality trait</label>
+            <label htmlFor="bred_for">Personality bred for</label>
             <input
               className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-              id="trait"
+              id="bred_for"
               type="text"
-              name="trait"
+              name="bred_for"
             />
           </fieldset>
           <fieldset
             disabled={false}
             className="col-span-2 flex w-full cursor-not-allowed flex-col gap-1 opacity-50"
           >
-            <label htmlFor="avatar_url">Profile pic</label>
+            <label htmlFor="image">Profile pic</label>
             <input
               className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-              id="avatar_url"
+              id="image"
               type="file"
-              name="avatar_url"
+              name="image"
             />
           </fieldset>
         </div>

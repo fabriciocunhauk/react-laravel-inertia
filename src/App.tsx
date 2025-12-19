@@ -8,6 +8,7 @@ import { Search } from "./components/Search";
 import { Shortlist } from "./components/Shortlist";
 import { fetchPuppies } from "./api/FetchPuppies";
 import { LikedContext } from "./context/LikedContext";
+import type { PuppiesListTypes } from "./types/puppyTypes";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ export default App;
 
 function Main() {
   const [isLiked, setIsLiked] = useState<number[]>([]);
-  const [puppiesList, setPuppiesList] = useState([]);
+  const [puppiesList, setPuppiesList] = useState<PuppiesListTypes[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
@@ -55,7 +56,7 @@ function Main() {
         </div>
         <PuppiesList puppiesList={filteredPuppies} />
       </LikedContext>
-      <NewPuppyForm />
+      <NewPuppyForm puppiesList={puppiesList} setPuppiesList={setPuppiesList} />
     </main>
   );
 }

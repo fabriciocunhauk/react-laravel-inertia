@@ -1,16 +1,8 @@
 import LikeButton from "./LikeButton";
 import { useLiked } from "../hooks/useLiked";
+import type { PuppiesListTypes } from "../types/puppyTypes";
 
-type PuppiesListProps = {
-  puppiesList: {
-    id: number;
-    name: string;
-    bred_for: string;
-    image: { url: string };
-  }[];
-};
-
-function PuppiesList({ puppiesList }: PuppiesListProps) {
+function PuppiesList({ puppiesList }: { puppiesList: PuppiesListTypes[] }) {
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {puppiesList.map((puppy) => (
