@@ -1,4 +1,5 @@
 import LikeButton from "./LikeButton";
+import { useLiked } from "../hooks/useLiked";
 
 type PuppiesListProps = {
   puppiesList: {
@@ -7,28 +8,14 @@ type PuppiesListProps = {
     bred_for: string;
     image: { url: string };
   }[];
-  isLiked: number[];
-  setIsLiked: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-function PuppiesList({ puppiesList, isLiked, setIsLiked }: PuppiesListProps) {
+function PuppiesList({ puppiesList }: PuppiesListProps) {
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {puppiesList.map(
-        (puppy: {
-          id: number;
-          name: string;
-          bred_for: string;
-          image: { url: string };
-        }) => (
-          <PuppyCard
-            key={puppy.id}
-            puppy={puppy}
-            isLiked={isLiked}
-            setIsLiked={setIsLiked}
-          />
-        ),
-      )}
+      {puppiesList.map((puppy) => (
+        <PuppyCard key={puppy.id} puppy={puppy} />
+      ))}
     </ul>
   );
 }
@@ -37,13 +24,11 @@ export default PuppiesList;
 
 function PuppyCard({
   puppy,
-  isLiked,
-  setIsLiked,
 }: {
   puppy: { id: number; name: string; bred_for: string; image: { url: string } };
-  isLiked: number[];
-  setIsLiked: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
+  const { isLiked, setIsLiked } = useLiked();
+
   return (
     <li className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5">
       <img

@@ -7,6 +7,7 @@ import PuppiesList from "./components/PuppiesList";
 import { Search } from "./components/Search";
 import { Shortlist } from "./components/Shortlist";
 import { fetchPuppies } from "./api/FetchPuppies";
+import { LikedContext } from "./context/LikedContext";
 
 function App() {
   return (
@@ -36,20 +37,13 @@ function Main() {
 
   return (
     <main>
-      <div className="mt-24 grid gap-8 sm:grid-cols-2">
-        <Search />
-        <Shortlist
-          puppiesList={puppiesList}
-          puppyIds={isLiked}
-          isLiked={isLiked}
-          setIsLiked={setIsLiked}
-        />
-      </div>
-      <PuppiesList
-        puppiesList={puppiesList}
-        isLiked={isLiked}
-        setIsLiked={setIsLiked}
-      />
+      <LikedContext value={{ isLiked, setIsLiked }}>
+        <div className="mt-24 grid gap-8 sm:grid-cols-2">
+          <Search />
+          <Shortlist puppiesList={puppiesList} puppyIds={isLiked} />
+        </div>
+        <PuppiesList puppiesList={puppiesList} />
+      </LikedContext>
       <NewPuppyForm />
     </main>
   );

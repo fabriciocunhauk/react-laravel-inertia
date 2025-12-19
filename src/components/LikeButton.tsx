@@ -25,19 +25,21 @@ function LikeButton({ puppyId, isLiked, setIsLiked }: LikeButtonProps) {
   };
 
   return (
-    <button className="group flex items-center gap-1" onClick={handleClick}>
-      <Heart
-        className={
-          currentlyLiked
-            ? "fill-pink-500 stroke-pink-500"
-            : "stroke-slate-400 group-hover:stroke-slate-600"
-        }
-        size={20}
-      />
+    <div className="flex items-center gap-1">
+      <button className="group" onClick={handleClick}>
+        <Heart
+          className={
+            currentlyLiked
+              ? "fill-pink-500 stroke-pink-500"
+              : "stroke-slate-400 group-hover:stroke-slate-600"
+          }
+          size={20}
+        />
+      </button>
       <span className={currentlyLiked ? "text-pink-600" : "text-slate-600"}>
         {count}
       </span>
-    </button>
+    </div>
   );
 }
 
