@@ -1,5 +1,5 @@
 import { Delete } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import { useRef, type Dispatch, type SetStateAction } from "react";
 
 export function Search({
   searchQuery,
@@ -8,6 +8,8 @@ export function Search({
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
 }) {
+  const inputRef = useRef(null);
+
   return (
     <div>
       <label htmlFor="search" className="font-medium">
@@ -15,6 +17,7 @@ export function Search({
       </label>
       <div className="mt-2 flex items-center gap-4">
         <input
+          ref={inputRef}
           placeholder="playful..."
           name="search"
           id="search"
@@ -25,7 +28,10 @@ export function Search({
         />
         <button
           className="inline-block rounded bg-cyan-300 px-4 py-2 font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-          onClick={() => setSearchQuery("")}
+          onClick={() => {
+            setSearchQuery("");
+            (inputRef.current as HTMLInputElement | null)?.focus();
+          }}
         >
           <Delete />
         </button>

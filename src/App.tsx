@@ -37,7 +37,7 @@ function Main() {
   }, []);
 
   const filteredPuppies = puppiesList.filter(
-    (puppy: { id: number; name: string; image: { url: string } }) => {
+    (puppy: { id: number; name: string }) => {
       if (!searchQuery) return true;
       return (
         puppy.name &&
