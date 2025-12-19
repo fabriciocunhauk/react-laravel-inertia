@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo, Suspense, use } from "react";
 import { Container } from "./components/Container";
 import { Header } from "./components/Header";
 import { NewPuppyForm } from "./components/NewPuppyForm";
@@ -10,45 +10,49 @@ import { fetchPuppies } from "./api/FetchPuppies";
 import { LikedContext } from "./context/LikedContext";
 import type { PuppiesListTypes } from "./types/puppyTypes";
 import { LoaderCircleIcon } from "lucide-react";
+import { ErrorBoundary } from "react-error-boundary";
 
-function App() {
-  return (
-    <PageWrapper>
-      <Container>
-        <Header />
-        <Main />
-      </Container>
-    </PageWrapper>
-  );
-}
+const App = () => (
+  <PageWrapper>
+    <Container>
+      <Header />
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <div className="bg-red-100 p-4 text-red-500">
+            <p>Error: {error.message}</p>
+          </div>
+        )}
+      >
+        <Suspense
+          fallback={
+            <LoaderCircleIcon className="mx-auto mt-20 animate-spin stroke-cyan-400" />
+          }
+        >
+          <Main />
+        </Suspense>
+      </ErrorBoundary>
+    </Container>
+  </PageWrapper>
+);
 
 export default App;
 
-function Main() {
+const puppyPromise = fetchPuppies();
+
+const Main = () => {
+  const puppiesList: PuppiesListTypes[] = use(puppyPromise);
   const [isLiked, setIsLiked] = useState<number[]>([]);
-  const [puppiesList, setPuppiesList] = useState<PuppiesListTypes[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [loading, setIsLoading] = useState<boolean>(false);
+  const [puppy, setPoppy] = useState<PuppiesListTypes[]>(puppiesList);
 
-  useEffect(() => {
-    async function getPuppies() {
-      setIsLoading(true);
-      const puppies = await fetchPuppies();
-      setIsLoading(false);
-      setPuppiesList(puppies);
-    }
-
-    getPuppies();
-  }, []);
-
-  const filteredPuppies = puppiesList.filter(
-    (puppy: { id: number; name: string }) => {
-      if (!searchQuery) return true;
-      return (
-        puppy.name &&
-        puppy.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    },
+  const filteredPuppies = useMemo(
+    () =>
+      puppy.filter((puppy) =>
+        searchQuery
+          ? puppy.name?.toLowerCase().includes(searchQuery.toLowerCase())
+          : true,
+      ),
+    [puppy, searchQuery],
   );
 
   return (
@@ -58,13 +62,10 @@ function Main() {
           <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <Shortlist puppiesList={puppiesList} puppyIds={isLiked} />
         </div>
-        {loading ? (
-          <LoaderCircleIcon className="mx-auto mt-20 animate-spin stroke-cyan-400" />
-        ) : (
-          <PuppiesList puppiesList={filteredPuppies} />
-        )}
+
+        <PuppiesList puppiesList={filteredPuppies} />
       </LikedContext>
-      <NewPuppyForm puppiesList={puppiesList} setPuppiesList={setPuppiesList} />
+      <NewPuppyForm puppiesList={puppiesList} setPuppiesList={setPoppy} />
     </main>
   );
-}
+};

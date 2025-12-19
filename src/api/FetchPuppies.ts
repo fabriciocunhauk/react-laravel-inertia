@@ -1,14 +1,22 @@
-  export const fetchPuppies = async () => {
-        const response = await fetch(
-          "https://api.thedogapi.com/v1/breeds?limit=20",
-          {
-            headers: {
-              "x-api-key": `${import.meta.env.VITE_API_KEY}`,
-            },
-            method: "GET",
-          },
-        );
-        const data = await response.json();
+export async function fetchPuppies() {
+  const API_URL = "https://api.thedogapi.com/v1/breeds?limit=20";
+  const apiKey = import.meta.env.VITE_API_KEY;
 
-        return data;
-      };
+  try {
+    const response = await fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "x-api-key": apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch puppies:", error);
+    throw new Error("Can't fetch puppies");
+  }
+}
