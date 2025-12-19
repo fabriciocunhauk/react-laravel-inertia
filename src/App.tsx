@@ -25,6 +25,7 @@ export default App;
 function Main() {
   const [isLiked, setIsLiked] = useState<number[]>([]);
   const [puppiesList, setPuppiesList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     async function getPuppies() {
@@ -35,14 +36,24 @@ function Main() {
     getPuppies();
   }, []);
 
+  const filteredPuppies = puppiesList.filter(
+    (puppy: { id: number; name: string; image: { url: string } }) => {
+      if (!searchQuery) return true;
+      return (
+        puppy.name &&
+        puppy.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    },
+  );
+
   return (
     <main>
       <LikedContext value={{ isLiked, setIsLiked }}>
         <div className="mt-24 grid gap-8 sm:grid-cols-2">
-          <Search />
+          <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <Shortlist puppiesList={puppiesList} puppyIds={isLiked} />
         </div>
-        <PuppiesList puppiesList={puppiesList} />
+        <PuppiesList puppiesList={filteredPuppies} />
       </LikedContext>
       <NewPuppyForm />
     </main>
