@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { PuppiesListTypes } from "../types/puppyTypes";
+import { useFormStatus } from "react-dom";
 
 export function NewPuppyForm({
   puppiesList,
@@ -29,6 +30,7 @@ export function NewPuppyForm({
           <fieldset className="flex w-full flex-col gap-1">
             <label htmlFor="name">Name</label>
             <input
+              required
               className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
               id="name"
               type="text"
@@ -38,6 +40,7 @@ export function NewPuppyForm({
           <fieldset className="flex w-full flex-col gap-1">
             <label htmlFor="bred_for">Personality bred for</label>
             <input
+              required
               className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
               id="bred_for"
               type="text"
@@ -50,6 +53,7 @@ export function NewPuppyForm({
           >
             <label htmlFor="image">Profile pic</label>
             <input
+              required
               className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
               id="image"
               type="file"
@@ -57,13 +61,22 @@ export function NewPuppyForm({
             />
           </fieldset>
         </div>
-        <button
-          className="mt-4 inline-block rounded bg-cyan-300 px-4 py-2 font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-          type="submit"
-        >
-          Add puppy
-        </button>
+        <SubmitButton />
       </form>
     </div>
+  );
+}
+
+function SubmitButton() {
+  const { pending, data } = useFormStatus();
+
+  return (
+    <button
+      disabled={pending}
+      className="mt-4 rounded bg-cyan-300 px-4 py-2 font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-200"
+      type="submit"
+    >
+      {pending ? `Adding ${data.get("name") || "puppy"}...` : "Add Puppy"}
+    </button>
   );
 }

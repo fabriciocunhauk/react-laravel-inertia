@@ -9,6 +9,7 @@ import { Shortlist } from "./components/Shortlist";
 import { fetchPuppies } from "./api/FetchPuppies";
 import { LikedContext } from "./context/LikedContext";
 import type { PuppiesListTypes } from "./types/puppyTypes";
+import { LoaderCircleIcon } from "lucide-react";
 
 function App() {
   return (
@@ -27,10 +28,13 @@ function Main() {
   const [isLiked, setIsLiked] = useState<number[]>([]);
   const [puppiesList, setPuppiesList] = useState<PuppiesListTypes[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [loading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getPuppies() {
+      setIsLoading(true);
       const puppies = await fetchPuppies();
+      setIsLoading(false);
       setPuppiesList(puppies);
     }
 
@@ -54,7 +58,11 @@ function Main() {
           <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <Shortlist puppiesList={puppiesList} puppyIds={isLiked} />
         </div>
-        <PuppiesList puppiesList={filteredPuppies} />
+        {loading ? (
+          <LoaderCircleIcon className="mx-auto mt-20 animate-spin stroke-cyan-400" />
+        ) : (
+          <PuppiesList puppiesList={filteredPuppies} />
+        )}
       </LikedContext>
       <NewPuppyForm puppiesList={puppiesList} setPuppiesList={setPuppiesList} />
     </main>
