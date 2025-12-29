@@ -41,9 +41,9 @@ const puppyPromise = fetchPuppies();
 
 const Main = () => {
   const puppiesList: PuppiesListTypes[] = use(puppyPromise);
+  const [puppy, setPoppy] = useState<PuppiesListTypes[]>(puppiesList);
   const [isLiked, setIsLiked] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [puppy, setPoppy] = useState<PuppiesListTypes[]>(puppiesList);
 
   const filteredPuppies = useMemo(
     () =>
